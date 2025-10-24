@@ -23,25 +23,26 @@ public class Pedido {
         this.entrega = entrega;
     }
     
+    public int getId() {
+        return id;
+    }
+    
     public void SetId(int idNovo) {
         this.id = idNovo;
    }
 
- // Dentro da classe modelo.Pedido
     @Override
     public String toString() {
         String info = "Pedido [id=" + id + ", data=" + data + ", valor=" + valor + 
                       ", descrição=" + descricao + ", localização=" + localizacao;
         
-        // Relacionamento com Entrega
         if (entrega != null) {
-            info += ", ID da Entrega: " + entrega.getId(); // Pega só o ID da entrega
+            info += ", ID da Entrega: " + entrega.getId(); 
         } else {
-            info += ", Entrega: (não definida)";
+            info += ", Entrega: Não tem";
         }
         
         info += "]";
         return info;
-        // Saída: Pedido [id=1, data=22/10/2025, valor=150.0, ..., ID da Entrega: 1]
     }
 }
