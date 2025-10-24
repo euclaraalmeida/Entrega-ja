@@ -47,20 +47,25 @@ public class Entrega {
         return lista_pedidos;
     }
 
- // Dentro da classe modelo.Entrega
     @Override
     public String toString() {
         String info = "Entrega [id=" + id + ", data=" + data;
         
-        // Relacionamento com Entregador
         if (entregador != null) {
-            info += ", Entregador: " + entregador.getNome(); // Pega só o nome
+            info += ", Entregador: " + entregador.getNome(); 
         } else {
-            info += ", Entregador: (não definido)";
+            info += ", Entregador: Não tem";
         }
         
-        // Relacionamento com Pedidos
-        info += ", Qtd Pedidos: " + lista_pedidos.size() + "]";
+        if (lista_pedidos.isEmpty()) {
+            info += ", Nenhum pedido";
+        } else {
+            info += ", Pedidos: [";
+            for (Pedido p : lista_pedidos) {
+                info += p.getId() + ", "; 
+            }
+            info = info.substring(0, info.length() - 2) + "]]";
+        }
         
         return info;
     }
