@@ -5,7 +5,7 @@ import com.db4o.query.Evaluation;
 import modelo.Entregador;
 
 
-
+/*
 // Classe com o nome "Filtro"
 class Filtro implements Evaluation {
 
@@ -21,3 +21,4 @@ class Filtro implements Evaluation {
         candidate.include(maisDeCinco);
     }
 }
+*/

@@ -3,12 +3,10 @@ package appconsole;
 import java.util.List;
 
 import com.db4o.ObjectContainer;
-import com.db4o.query.Candidate;
-import com.db4o.query.Evaluation;
 import com.db4o.query.Query;
 
-import modelo.Entregador;
 import modelo.Entrega;
+import modelo.Entregador;
 import modelo.Pedido;
 
 public class Consultar {
@@ -64,7 +62,7 @@ public class Consultar {
 			
 			}
 	
-
+ /*
 		// -----------------------------------------------------------------
 		// 3. quais os entregadores que tem mais N entregas (ex: N=2)
 		// -----------------------------------------------------------------
@@ -88,9 +86,12 @@ public class Consultar {
 			for (Entregador e : resultados) {
 			    System.out.println(e.getNome() + " tem " + e.getEntregas().size() + " entregas.");
 			}
+			
+			*/
 	}
-		
-	public static void main(String[] args) {
+	  
+    public static void main(String[] args) {
 		new Consultar();
-	}
 }
+}
+
