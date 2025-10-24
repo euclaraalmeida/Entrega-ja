@@ -15,7 +15,7 @@ public class Consultar {
 	public Consultar() {
 		try {
 			manager = Util.conectarBanco();
-			consultar(); // Chama o método com as consultas
+			consultar();
 		} catch (Exception e) {
 			System.out.println("Erro durante a consulta: " + e.getMessage());
 		} finally {
@@ -27,9 +27,7 @@ public class Consultar {
 	public void consultar() {
 		System.out.println("------ Iniciando Consultas ------");
 
-		// -----------------------------------------------------------------
 		// 1. quais as entregas na data 23/10/2025
-		// -----------------------------------------------------------------
 		System.out.println("\n--- 1. Quais as entregas na data 23/10/2025 ---");
 		Query q1 = manager.query();
 		q1.constrain(Entrega.class);
@@ -41,9 +39,7 @@ public class Consultar {
 
 		}
 
-		// -----------------------------------------------------------------
 		// 2. quais os pedidos entregues pelo entregador de nome "Maria"
-		// -----------------------------------------------------------------
 		System.out.println("\n--- 2. Quais os pedidos entregues pelo entregador 'Maria' ---");
 		Query q2 = manager.query();
 		q2.constrain(Pedido.class);
@@ -63,26 +59,19 @@ public class Consultar {
 			}
 	
  /*
-		// -----------------------------------------------------------------
 		// 3. quais os entregadores que tem mais N entregas (ex: N=2)
-		// -----------------------------------------------------------------
 			
 
-			// ... dentro do seu método de consulta ...
+			
 
-			// Supondo que 'manager' seja seu ObjectContainer
 			Query q = manager.query();
 
-			// 1. Queremos consultar objetos da classe Entregador
 			q.constrain(Entregador.class);
 
-			// 2. Aplicamos nosso filtro personalizado
 			q.constrain(new Filtro());
 
-			// 3. Executa a consulta
 			List<Entregador> resultados = q.execute();
 
-			// Agora, 'resultados' contém apenas os entregadores com mais de 5 entregas
 			for (Entregador e : resultados) {
 			    System.out.println(e.getNome() + " tem " + e.getEntregas().size() + " entregas.");
 			}
