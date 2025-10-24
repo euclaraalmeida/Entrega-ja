@@ -28,7 +28,7 @@ public class Listar {
     
     public void listar() {
         
-
+    	
         System.out.println("------Lista de Entregadores---");
         Query q1 = manager.query(); 
         q1.constrain(Entregador.class);
