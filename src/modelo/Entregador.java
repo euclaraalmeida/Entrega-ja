@@ -32,20 +32,21 @@ public class Entregador {
     public List<Entrega> getEntregas() {
         return lista_entregas;
     }
- // Dentro da classe modelo.Entregador
     @Override
     public String toString() {
         String info = "Entregador [id=" + id + ", nome=" + nome;
         
-        // Mostra o relacionamento
         if (lista_entregas.isEmpty()) {
-            info += ", Entregas: 0]";
+            info += ", Entregas: Não tem";
         } else {
-            info += ", Qtd Entregas: " + lista_entregas.size() + "]";
+            info += ", Entregas: [";
+            for (Entrega e : lista_entregas) {
+                info += e.getId() + ", "; 
+            }
+            info = info.substring(0, info.length() - 2) + "]]"; 
         }
         
         return info;
-        // Saída: Entregador [id=1, nome=João, Qtd Entregas: 1]
-    }
-}
+        
+    }}
  
