@@ -9,7 +9,7 @@ public class Cadastrar {
 	private ObjectContainer manager;
 
 	public Cadastrar() {
-		try { // --> Boa prática: colocar o código de banco dentro de um try-finally
+		try { 
 			manager = Util.conectarBanco();
 			
 			// --- Criar Entregadores ---
@@ -48,16 +48,12 @@ public class Cadastrar {
 			Pedido P9 = new Pedido("30/10/2025", 22.5, "Pedido de alimentos", "Buritis");
 			Pedido P10 = new Pedido("31/10/2025", 98.3, "Pedido de calçados", "Ouro Preto do Oeste");
 
-			// --- 4. FAZER AS LIGAÇÕES (O PONTO MAIS IMPORTANTE) ---
-			// (Assumindo que você tem métodos como 'setEntregador', 'addPedido', 'setEntrega', 'addEntrega')
-			
-			// Exemplo 1: Ligando e1 -> E1 -> P1
+		
 			e1.adicionar(E1);   // Entregador 'João' fez a Entrega E1
 			E1.setEntregador(e1); // A Entrega E1 foi feita por 'João'
 			E1.adicionar(P1);    // A Entrega E1 contém o Pedido P1
 			P1.setEntrega(E1);   // O Pedido P1 pertence à Entrega E1
 
-			// Exemplo 2: Ligando e2 -> E2 -> (P2 e P3)
 			e2.adicionar(E2);   // Entregadora 'Maria' fez a Entrega E2
 			E2.setEntregador(e2); // A Entrega E2 foi feita por 'Maria'
 			E2.adicionar(P2);    // A Entrega E2 contém o Pedido P2
@@ -65,19 +61,17 @@ public class Cadastrar {
 			P2.setEntrega(E2);   // O Pedido P2 pertence à Entrega E2
 			P3.setEntrega(E2);   // O Pedido P3 pertence à Entrega E2
 
-			// Exemplo 3: Ligando e3 -> E3 -> P4
+			
 			e3.adicionar(E3);
 			E3.setEntregador(e3);
 			E3.adicionar(P4);
 			P4.setEntrega(E3);
 			
-			// (Faça o mesmo para os outros objetos... P5 a P10, E4 a E10, e4 a e10)
-			// (Obs: Você pode ter entregas sem pedidos, ou entregadores sem entregas,
-			// mas para testar seu sistema, é bom ligar vários deles)
+			
+		
 
 
-			// --- 5. Salvar os objetos ---
-			// (Você pode salvar todos, mesmo os que não foram ligados)
+		
 			manager.store(P1);
 			manager.store(P2);
 			manager.store(P3);
@@ -116,9 +110,9 @@ public class Cadastrar {
 
 		} catch (Exception e) {
 			System.out.println("Erro ao cadastrar: " + e.getMessage());
-			manager.rollback(); // Desfaz qualquer mudança se der erro
+			manager.rollback();
 		} finally {
-			Util.desconectar(); // Garante que o banco será desconectado
+			Util.desconectar(); 
 		}
 	}
 
