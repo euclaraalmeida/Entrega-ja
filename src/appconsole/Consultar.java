@@ -68,37 +68,46 @@ public class Consultar {
 		// -----------------------------------------------------------------
 		// 3. quais os entregadores que tem mais N entregas (ex: N=2)
 		// -----------------------------------------------------------------
-		System.out.println("\n--- 3. Quais os entregadores que tem mais de 5 entregas ---");
-		
-		final int N = 5; // Você pode mudar esse valor
+			System.out.println("Procurando por S.O.D.A. + Evaluation...");
 
-		Query q3 = manager.query();
-		q3.constrain(Entregador.class);
-		q3.constrain(new Evaluation() {
-			public void evaluate(Candidate candidate) {
-				Entregador entregador = (Entregador) candidate.getObject();
-				if (entregador.getListaDeEntrega() != null && entregador.getListaDeEntrega().size() > N) {
-					candidate.include(true);
-				} else {
-					candidate.include(false);
-				}
+			// 1. Inicia a consulta S.O.D.A.
+			Query q = db.query();
+
+			// 2. Define a classe que queremos buscar
+			q.constrain(Entregador.class);
+
+			// 3. Adiciona o filtro customizado (a classe que implementa Evaluation)
+			q.constrain( new FiltroEntregadorComMaisDe5Entregas() );
+
+			// 4. Executa a consulta
+			List<Entregador> resultados = q.execute();
+
+			// 5. Exibe os resultados
+			for(Entregador e : resultados) {
+			    System.out.println("- " + e.getNome() + " (Total: " + e.getListaDeEntrega().size() + " entregas)");
 			}
-		});
 
-		List<Entregador> resultados3 = q3.execute();
 
-		if (resultados3.isEmpty()) {
-			System.out.println("Nenhum entregador com mais de " + N + " entregas encontrado.");
-		} else {
-			System.out.println("Entregadores encontrados:");
-			for (Entregador e : resultados3) {
-				// Print principal
-				System.out.println(e);
-				
-			
-	}
-	
-	
+			/**
+			 * Classe de Filtro customizada que implementa a lógica
+			 * para avaliar cada objeto Entregador.
+			 */
+			class FiltroEntregadorComMaisDe5Entregas implements Evaluation {
+			    
+			    public void evaluate(Candidate candidate) {
+			        // Pega o objeto Entregador que está sendo avaliado
+			        Entregador e = (Entregador) candidate.getObject();
+
+			        // A lógica do filtro
+			        boolean incluir = (e.getListaDeEntrega() != null && 
+			                             e.getListaDeEntrega().size() > 5);
+			        
+			        // Diz ao db4o se deve incluir (true) ou não (false) este objeto
+			        candidate.include(incluir);
+			    }
+			}
+		
+		
 	public static void main(String[] args) {
 		new Consultar();
 	}

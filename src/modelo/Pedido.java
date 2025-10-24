@@ -8,12 +8,12 @@ public class Pedido {
     private Entrega entrega;
     private String localizacao;
 
-    public Pedido(int id, String data, double valor, String descricao, String localizao) {
+    public Pedido(int id, String data, double valor, String descricao, String localizacao) {
         this.id = id;
         this.data = data;
         this.valor = valor;
         this.descricao = descricao;
-        this.localizacao = localizacao
+        this.localizacao = localizacao;
     }
 
     public Entrega getEntrega() {
