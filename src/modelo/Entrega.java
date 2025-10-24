@@ -6,14 +6,12 @@ import java.util.List;
 public class Entrega {
     private int id;
     private String data;
-    private String localizacao;
     private Entregador entregador;
     private List<Pedido> lista_pedidos = new ArrayList<>();
 
     public Entrega(int id, String data, String localizacao) {
         this.id = id;
         this.data = data;
-        this.localizacao = localizacao;
     }
 
     public void adicionar(Pedido p) {
@@ -44,10 +42,21 @@ public class Entrega {
         return lista_pedidos;
     }
 
+ // Dentro da classe modelo.Entrega
     @Override
     public String toString() {
-        String nomeEntregador = (entregador != null) ? entregador.getNome() : "N/A";
-        return "Entrega [id=" + id + ", data=" + data + ", localizacao=" + localizacao 
-                + ", entregador=" + nomeEntregador + ", N. de pedidos=" + lista_pedidos.size() + "]";
+        String info = "Entrega [id=" + id + ", data=" + data;
+        
+        // Relacionamento com Entregador
+        if (entregador != null) {
+            info += ", Entregador: " + entregador.getNome(); // Pega só o nome
+        } else {
+            info += ", Entregador: (não definido)";
+        }
+        
+        // Relacionamento com Pedidos
+        info += ", Qtd Pedidos: " + lista_pedidos.size() + "]";
+        
+        return info;
     }
 }
