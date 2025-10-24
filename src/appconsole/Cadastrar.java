@@ -52,23 +52,23 @@ public class Cadastrar {
 			// (Assumindo que você tem métodos como 'setEntregador', 'addPedido', 'setEntrega', 'addEntrega')
 			
 			// Exemplo 1: Ligando e1 -> E1 -> P1
-			e1.addEntrega(E1);   // Entregador 'João' fez a Entrega E1
+			e1.adicionar(E1);   // Entregador 'João' fez a Entrega E1
 			E1.setEntregador(e1); // A Entrega E1 foi feita por 'João'
-			E1.addPedido(P1);    // A Entrega E1 contém o Pedido P1
+			E1.adicionar(P1);    // A Entrega E1 contém o Pedido P1
 			P1.setEntrega(E1);   // O Pedido P1 pertence à Entrega E1
 
 			// Exemplo 2: Ligando e2 -> E2 -> (P2 e P3)
-			e2.addEntrega(E2);   // Entregadora 'Maria' fez a Entrega E2
+			e2.adicionar(E2);   // Entregadora 'Maria' fez a Entrega E2
 			E2.setEntregador(e2); // A Entrega E2 foi feita por 'Maria'
-			E2.addPedido(P2);    // A Entrega E2 contém o Pedido P2
-			E2.addPedido(P3);    // A Entrega E2 também contém o Pedido P3
+			E2.adicionar(P2);    // A Entrega E2 contém o Pedido P2
+			E2.adicionar(P3);    // A Entrega E2 também contém o Pedido P3
 			P2.setEntrega(E2);   // O Pedido P2 pertence à Entrega E2
 			P3.setEntrega(E2);   // O Pedido P3 pertence à Entrega E2
 
 			// Exemplo 3: Ligando e3 -> E3 -> P4
-			e3.addEntrega(E3);
+			e3.adicionar(E3);
 			E3.setEntregador(e3);
-			E3.addPedido(P4);
+			E3.adicionar(P4);
 			P4.setEntrega(E3);
 			
 			// (Faça o mesmo para os outros objetos... P5 a P10, E4 a E10, e4 a e10)

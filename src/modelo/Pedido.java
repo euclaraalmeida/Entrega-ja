@@ -8,21 +8,24 @@ public class Pedido {
     private Entrega entrega;
     private String localizacao;
 
-    public Pedido(int id, String data, double valor, String descricao, String localizacao) {
-        this.id = id;
+
+    public Pedido(String data, double valor, String descricao, String localizacao) {
         this.data = data;
         this.valor = valor;
         this.descricao = descricao;
-        this.localizacao = localizacao;
-    }
+        this.localizacao = localizacao;	}
 
-    public Entrega getEntrega() {
+	public Entrega getEntrega() {
         return entrega;
     }
 
     public void setEntrega(Entrega entrega) {
         this.entrega = entrega;
     }
+    
+    public void SetId(int idNovo) {
+        this.id = idNovo;
+   }
 
  // Dentro da classe modelo.Pedido
     @Override

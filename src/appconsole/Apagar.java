@@ -58,6 +58,6 @@ public class Apagar {
 
     
     public static void main(String[] args) {
-        new Apagar();
-    }
+		new Apagar();
+}
 }

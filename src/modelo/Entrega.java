@@ -9,12 +9,13 @@ public class Entrega {
     private Entregador entregador;
     private List<Pedido> lista_pedidos = new ArrayList<>();
 
-    public Entrega(int id, String data, String localizacao) {
-        this.id = id;
-        this.data = data;
-    }
+   
+    public Entrega(String data) {
+        this.data = data;	}
 
-    public void adicionar(Pedido p) {
+	
+
+	public void adicionar(Pedido p) {
         lista_pedidos.add(p);
     }
 
@@ -24,6 +25,10 @@ public class Entrega {
     
     public int getId() {
         return id;
+    }
+    
+    public void SetId(int idNovo) {
+         this.id = idNovo;
     }
 
     public String getData() {

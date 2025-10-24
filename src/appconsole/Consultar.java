@@ -68,45 +68,27 @@ public class Consultar {
 		// -----------------------------------------------------------------
 		// 3. quais os entregadores que tem mais N entregas (ex: N=2)
 		// -----------------------------------------------------------------
-			System.out.println("Procurando por S.O.D.A. + Evaluation...");
+			
 
-			// 1. Inicia a consulta S.O.D.A.
-			Query q = db.query();
+			// ... dentro do seu método de consulta ...
 
-			// 2. Define a classe que queremos buscar
+			// Supondo que 'manager' seja seu ObjectContainer
+			Query q = manager.query();
+
+			// 1. Queremos consultar objetos da classe Entregador
 			q.constrain(Entregador.class);
 
-			// 3. Adiciona o filtro customizado (a classe que implementa Evaluation)
-			q.constrain( new FiltroEntregadorComMaisDe5Entregas() );
+			// 2. Aplicamos nosso filtro personalizado
+			q.constrain(new Filtro());
 
-			// 4. Executa a consulta
+			// 3. Executa a consulta
 			List<Entregador> resultados = q.execute();
 
-			// 5. Exibe os resultados
-			for(Entregador e : resultados) {
-			    System.out.println("- " + e.getNome() + " (Total: " + e.getListaDeEntrega().size() + " entregas)");
+			// Agora, 'resultados' contém apenas os entregadores com mais de 5 entregas
+			for (Entregador e : resultados) {
+			    System.out.println(e.getNome() + " tem " + e.getEntregas().size() + " entregas.");
 			}
-
-
-			/**
-			 * Classe de Filtro customizada que implementa a lógica
-			 * para avaliar cada objeto Entregador.
-			 */
-			class FiltroEntregadorComMaisDe5Entregas implements Evaluation {
-			    
-			    public void evaluate(Candidate candidate) {
-			        // Pega o objeto Entregador que está sendo avaliado
-			        Entregador e = (Entregador) candidate.getObject();
-
-			        // A lógica do filtro
-			        boolean incluir = (e.getListaDeEntrega() != null && 
-			                             e.getListaDeEntrega().size() > 5);
-			        
-			        // Diz ao db4o se deve incluir (true) ou não (false) este objeto
-			        candidate.include(incluir);
-			    }
-			}
-		
+	}
 		
 	public static void main(String[] args) {
 		new Consultar();

@@ -8,15 +8,19 @@ public class Entregador {
     private String nome;
     private List<Entrega> lista_entregas = new ArrayList<>();
 
-    public Entregador(int id, String nome) {
-        this.id = id;
+    public Entregador(String nome) {
         this.nome = nome;
     }
 
-    public void adicionar(Entrega e) {
+ 
+
+	public void adicionar(Entrega e) {
         lista_entregas.add(e);
     }
-
+    
+    public void SetId(int idNovo) {
+        this.id = idNovo;
+   }
     public void remover(Entrega e) {
         lista_entregas.remove(e);
     }

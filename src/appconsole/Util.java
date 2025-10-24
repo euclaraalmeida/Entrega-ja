@@ -1,9 +1,19 @@
-package appconsole; 
+package appconsole;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.TreeMap;
+
 
 import com.db4o.Db4oEmbedded;
+import com.db4o.EmbeddedObjectContainer;
 import com.db4o.ObjectContainer;
 import com.db4o.config.EmbeddedConfiguration;
-
+import com.db4o.cs.Db4oClientServer;
+import com.db4o.cs.config.ClientConfiguration;
+import com.db4o.events.EventRegistry;
+import com.db4o.events.EventRegistryFactory;
+import com.db4o.query.Query;
 import modelo.Entrega;
 import modelo.Entregador;
 import modelo.Pedido;
@@ -42,7 +52,6 @@ public class Util {
         // Retorna o manager (novo ou o que já existia)
         return manager;
     }
-
     
     public static void desconectar() {
         // ---- MELHORIA AQUI ----
@@ -52,118 +61,166 @@ public class Util {
             manager = null; // Essencial para o conectarBanco() funcionar da prox vez
         }
     }
-}
+    
+    
+    static String getIPservidor() {
+		return getIPservidor();
+	}
+
+	static ObjectContainer getManager() {
+		return manager;
+	}
 
 
 
 
 
+//**********************************************
+//classe interna 
+//Controla a gera��o automatica de IDs para 
+//as classes que possuem um atributo id
+//**********************************************
 class ControleID {
-  private static EmbeddedObjectContainer bancoSequencias;
-  private static TreeMap<String, SequenciaID> memoriaSequencias = new TreeMap<>();
-  private static boolean salvar;
+	private static ObjectContainer sequencia; // bd auxiliar de sequencias DE IDs
+	private static TreeMap<String, RegistroID> registros = new TreeMap<String, RegistroID>(); //cache de registros de ids
+	private static boolean salvar; // indica se precisa salvar os registros de id
 
-  public static void ativar(ObjectContainer manager) {
-    bancoSequencias = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "sequencias.db4o");
+	public static void ativar(boolean ativa, ObjectContainer manager) {
+		if (!ativa)
+			return; // controle de ids nao ser� feito
+		if (manager == null)
+			throw new RuntimeException("Ativar controle de id - manager desconhecido"); // desativado
 
-    lerSequenciasID();
+		if (manager instanceof EmbeddedObjectContainer) {
+			// banco de sequencia no local
+			Db4oEmbedded.newConfiguration();
+			sequencia = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "sequencia.db4o");
+			//System.out.println("conectou sequencia local");
+		} else {
+			// banco de sequencia no servidor remoto
+			String ipservidor = Util.getIPservidor();
+			sequencia = Db4oClientServer.openClient(Db4oClientServer.newClientConfiguration(), ipservidor, 35000,
+					"usuario0", "senha0");
+			//System.out.println("conectou no banco de sequencia remoto ip=" + ipservidor);
+		}
+		lerRegistrosID(); // ler do banco os registros de id
 
-    EventRegistry events = EventRegistryFactory.forObjectContainer(manager);
+		// CRIAR GERENTE DE TRIGGERS PARA O MANAGER
+		EventRegistry eventRegistry = EventRegistryFactory.forObjectContainer(manager);
 
-    events.creating().addListener((_, args) -> {
-      try {
-        Object objeto = args.object();
+		// Resgistrar trigger "BEFORE PERSIST" causado pelo manager.store(objeto)
+		eventRegistry.creating().addListener((event, args) -> {
+			try {
+				//System.out.println("trigger creating");
+				Object objeto = args.object(); // objeto que esta sendo gravado
+				Field field = objeto.getClass().getDeclaredField("id");
+				if (field != null) { // tem campo id?
+					String nomedaclasse = objeto.getClass().getName();
+					RegistroID registro = obterRegistroID(nomedaclasse); // pega id da tabela
+					registro.incrementarID(); // incrementa o id
+					field.setAccessible(true); // habilita acesso ao campo id do objeto
+					field.setInt(objeto, registro.getid()); // atualiza o id do objeto
+					registros.put(nomedaclasse, registro); // atualiza tabela de id
+					salvar = true;
+				}
+			} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+			}
+		});
 
-        Field campo = objeto.getClass().getDeclaredField("id");
+		// Resgistrar trigger "AFTER COMMIT" causado pelo manager.commit()
+		eventRegistry.created().addListener((event, args) -> {
+			//System.out.println("trigger commit");
+			salvarRegistrosID(); // salvar registros de id alterados 
+		});
 
-        if (campo != null) {
-          String nomeClasse = objeto.getClass().getName();
-          SequenciaID sequencia = obterSequenciaID(nomeClasse);
+		// Resgistrar trigger "BEFORE CLOSE" causado pelo manager.close()
+		eventRegistry.closing().addListener((event, args) -> {
+			//System.out.println("trigger close");
+			if (sequencia != null && !sequencia.ext().isClosed())
+				sequencia.close(); // fecha o banco de sequencias
+		});
+	}
 
-          sequencia.incrementarID();
-          campo.setAccessible(true);
-          campo.setInt(objeto, sequencia.getUltimoId());
-          memoriaSequencias.put(nomeClasse, sequencia);
-          salvar = true;
-        }
+	private static void lerRegistrosID() {
+		Query q = sequencia.query();
+		q.constrain(RegistroID.class);
+		List<RegistroID> resultados = q.execute();
+		for (RegistroID reg : resultados) {
+			//System.out.println("lendo do bd sequencia: " + reg);
+			registros.put(reg.getNomedaclasse(), reg);
+		}
+		salvar = false;
 
+	}
 
-      } catch (Exception e) {
-        System.out.println(e);
-      }
-    });
+	private static void salvarRegistrosID() {
+		if (salvar) {
+			for (RegistroID reg : registros.values()) {
+				if (reg.isModificado()) {
+					//System.out.println("gravando no bd sequencia: " + reg);
+					sequencia.store(reg);
+					sequencia.commit();
+					reg.setModificado(false);
+				}
+			}
+			salvar = false;
+		}
+	}
 
-    events.created().addListener((_, _) -> {
-      salvarSequenciasID();
-    });
+	private static RegistroID obterRegistroID(String nomeclasse) {
+		RegistroID reg = null;
+		if (registros.containsKey(nomeclasse))
+			reg = registros.get(nomeclasse);
+		else
+			reg = new RegistroID(nomeclasse); // aninhamento
 
-    events.closing().addListener((_, _) -> {
-      if (bancoSequencias != null && !bancoSequencias.ext().isClosed()) {
-        bancoSequencias.close();
-      }
-    });
-  }
+		return reg;
+	}
 
-  public static void lerSequenciasID() {
-    Query query = bancoSequencias.query();
-    query.constrain(SequenciaID.class);
+} // fim classe interna ControleID
 
-    List<SequenciaID> resultado = query.execute();
+//*************************************************************
+//classe interna
+//Encapsula o ultimo ID gerado para uma classe
+//*************************************************************
+class RegistroID {
+	private String nomedaclasse;
+	private int ultimoid;
+	transient private boolean modificado = false; // nao sera persistido
 
-    for (SequenciaID seq : resultado) {
-      memoriaSequencias.put(seq.getNomeClasse(), seq);
-    }
+	public RegistroID(String nomedaclasse) {
+		this.nomedaclasse = nomedaclasse;
+		this.ultimoid = 0;
+	}
 
-    salvar = false;
-  }
+	public String getNomedaclasse() {
+		return nomedaclasse;
+	}
 
-  public static SequenciaID obterSequenciaID(String nomeClasse) {
-    return memoriaSequencias.containsKey(nomeClasse) ? memoriaSequencias.get(nomeClasse) : new SequenciaID(nomeClasse);
-  }
+	public int getid() {
+		return ultimoid;
+	}
 
-  public static void salvarSequenciasID() {
-    if (!salvar)
-      return;
+	public boolean isModificado() {
+		return modificado;
+	}
 
-    for (SequenciaID seq : memoriaSequencias.values()) {
-      if (seq.isModificado()) {
-        bancoSequencias.store(seq);
-        seq.setModificado(false);
-      }
-    }
+	public void setModificado(boolean modificado) {
+		this.modificado = modificado;
+	}
 
-    bancoSequencias.commit();
-  }
+	public void incrementarID() {
+		ultimoid++;
+		setModificado(true);
+	}
+
+	@Override
+	public String toString() {
+		return "RegistroID [nomedaclasse=" + nomedaclasse + ", ultimoid=" + ultimoid + "]";
+	}
+	
+}
 
 }
 
-class SequenciaID {
-  private String nomeClasse;
-  private Integer ultimoId = 0;
-  transient private boolean modificado = false;
-
-  public SequenciaID(String nomeClasse) {
-    this.nomeClasse = nomeClasse;
-  }
-
-  public String getNomeClasse() {
-    return nomeClasse;
-  }
-
-  public Integer getUltimoId() {
-    return ultimoId;
-  }
-
-  public boolean isModificado() {
-    return modificado;
-  }
-
-  public void setModificado(boolean modificado) {
-    this.modificado = modificado;
-  }
-
-  public void incrementarID() {
-    ultimoId++;
-    setModificado(true);
-  }
-}
+// fim classe RegistroID
