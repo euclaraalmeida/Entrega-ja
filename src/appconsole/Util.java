@@ -14,6 +14,8 @@ import com.db4o.query.Query;
 import modelo.Entrega;
 import modelo.Entregador;
 import modelo.Pedido;
+import com.db4o.events.EventRegistry;
+import com.db4o.events.EventRegistryFactory;
 
 public class Util {
     
@@ -39,6 +41,7 @@ public class Util {
             config.common().objectClass(Pedido.class).cascadeOnDelete(false); 
 
             manager = Db4oEmbedded.openFile(config, "banco_entrega.db4o");
+            ControleID.ativar(true, manager);
             
             
         }
@@ -59,8 +62,13 @@ public class Util {
 	static ObjectContainer getManager() {
 		return manager;
 	}
+
+	public static String getIPservidor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
- /*
+ 
 
 	//**********************************************
 	// classe interna 
@@ -170,7 +178,7 @@ public class Util {
 	// classe interna
 	// Encapsula o ultimo ID gerado para uma classe
 	// *************************************************************
-	static class RegistroID {
+	class RegistroID {
 		private String nomedaclasse;
 		private int ultimoid;
 		transient private boolean modificado = false; // nao sera persistido
@@ -207,4 +215,4 @@ public class Util {
 		}
 
 	} // fim classe RegistroID
-}*/
+
