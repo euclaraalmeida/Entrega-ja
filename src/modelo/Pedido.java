@@ -14,6 +14,13 @@ public class Pedido {
         this.valor = valor;
         this.descricao = descricao;
         this.localizacao = localizacao;	}
+    
+    
+    public double getValor() {
+        return valor;
+    }
+
+    
 
 	public Entrega getEntrega() {
         return entrega;
@@ -30,19 +37,16 @@ public class Pedido {
     public void SetId(int idNovo) {
         this.id = idNovo;
    }
-
-    @Override
-    public String toString() {
-        String info = "Pedido [id=" + id + ", data=" + data + ", valor=" + valor + 
-                      ", descrição=" + descricao + ", localização=" + localizacao;
-        
-        if (entrega != null) {
-            info += ", ID da Entrega: " + entrega.getId(); 
-        } else {
-            info += ", Entrega: Não tem";
-        }
-        
-        info += "]";
-        return info;
+    
+    public String getDescricao() {
+        return descricao;
     }
-}
+    
+
+  //tostring
+  		@Override
+  		public String toString() {
+  			return "id: " + this.id + " nome: " + this.data + " Valor: " + this.valor + " Entrega: " + (this.entrega != null ? this.entrega.getId() : "Pedido");
+  		}	
+  	}
+

@@ -29,7 +29,7 @@ public class Apagar {
             System.out.println("Entregador encontrado: " + entregadorParaApagar.getNome());
             
             
-            List<Entrega> listaDeEntregas = entregadorParaApagar.getEntregas();
+            List<Entrega> listaDeEntregas = entregadorParaApagar.getListaEntregas();
             
             if (listaDeEntregas.isEmpty()) {
                 System.out.println("Entregador não tem entregas, pode ser apagado diretamente.");

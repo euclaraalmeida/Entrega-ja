@@ -3,6 +3,8 @@ package appconsole;
 import java.util.List;
 
 import com.db4o.ObjectContainer;
+import com.db4o.query.Candidate;
+import com.db4o.query.Evaluation;
 import com.db4o.query.Query;
 
 import modelo.Entrega;
@@ -52,32 +54,52 @@ public class Consultar {
 
 			System.out.println("Pedidos encontrados:");
 			for (Pedido p : resultados2) {
-				// Print principal
 				System.out.println(p); 
 				
 			
 			}
 	
- /*
-		// 3. quais os entregadores que tem mais N entregas (ex: N=2)
-			
+ 
+	     System.out.println("\n---listar eventos com tem mais de N convidados");
+        // Criando a classe para uso do filtro
+        class Filtro implements Evaluation {
+            private int n;
 
-			
+            public Filtro(int n) {
+                this.n = n;
+            }
 
-			Query q = manager.query();
+           
+            public void evaluate(Candidate candidate) {
+                Entregador e = (Entregador) candidate.getObject();
+                if (e.getListaEntregas().size() > n)
+                    candidate.include(true);
+                else
+                    candidate.include(false);
+            }
 
-			q.constrain(Entregador.class);
 
-			q.constrain(new Filtro());
+		
+        }
+        
+        //criando a query para consulta
+        int N = 2;
+        Query queryEntregaFiltro = manager.query();
+        queryEntregaFiltro.constrain(Entregador.class);
+        queryEntregaFiltro.constrain(new Filtro(N)); // aplica o filtro
 
-			List<Entregador> resultados = q.execute();
+        List<Entregador> EntregadorComNEntregas = queryEntregaFiltro.execute();
 
-			for (Entregador e : resultados) {
-			    System.out.println(e.getNome() + " tem " + e.getEntregas().size() + " entregas.");
-			}
-			
-			*/
+        if (EntregadorComNEntregas.isEmpty()) {
+            System.out.println("Nenhum evento com mais de " + N + " convidados");
+        } else {
+            System.out.println("Evento(s) com mais de " + N + " convidados:");
+            for (Entregador e : EntregadorComNEntregas) {
+                System.out.println(e);
+            }
+        }
 	}
+
 	  
     public static void main(String[] args) {
 		new Consultar();

@@ -3,6 +3,8 @@ package modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import appconsole.Util;
+
 public class Entrega {
     private int id;
     private String data;
@@ -14,7 +16,6 @@ public class Entrega {
         this.data = data;	}
 
 	
-
 	public void adicionar(Pedido p) {
         lista_pedidos.add(p);
     }
@@ -43,30 +44,41 @@ public class Entrega {
         this.entregador = entregador;
     }
 
-    public List<Pedido> getPedidos() {
+    public List<Pedido> getListaPedidos() {
         return lista_pedidos;
     }
+    
+    
 
-    @Override
-    public String toString() {
-        String info = "Entrega [id=" + id + ", data=" + data;
-        
-        if (entregador != null) {
-            info += ", Entregador: " + entregador.getNome(); 
-        } else {
-            info += ", Entregador: Não tem";
-        }
-        
-        if (lista_pedidos.isEmpty()) {
-            info += ", Nenhum pedido";
-        } else {
-            info += ", Pedidos: [";
-            for (Pedido p : lista_pedidos) {
-                info += p.getId() + ", "; 
-            }
-            info = info.substring(0, info.length() - 2) + "]]";
-        }
-        
-        return info;
-    }
+
+    
+	public Pedido getEntregas(int id) throws Exception{			
+		for (Pedido c : lista_pedidos) {
+			if (c.getId() == id) {
+				return c;
+			}
+		}
+
+		throw new Exception("Convidado não encontrado");
+	}
+
+	public void adicionarEntrega(Pedido pedido) {
+		this.lista_pedidos.add(pedido);
+	}
+	
+
+    
+   
+	//toString
+	@Override
+	public String toString() {
+		ArrayList<String> descricaoPedido = new ArrayList<String>();
+		for(Pedido c : this.getListaPedidos()) {
+			descricaoPedido.add(c.getDescricao());
+		}
+		
+		return "Entrega [data=" + data + ", " + " Pedidos: " + descricaoPedido + "]";
+	}
+
+
 }
