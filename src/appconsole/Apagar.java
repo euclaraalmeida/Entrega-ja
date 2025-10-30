@@ -21,7 +21,7 @@ public class Apagar {
         
         Query q = manager.query();
         q.constrain(Entregador.class);
-        q.descend("nome").constrain("João");
+        q.descend("nome").constrain("Davi");
         List<Entregador> resultados = q.execute();
         
         if (resultados.size() > 0) {
@@ -49,10 +49,10 @@ public class Apagar {
             
             
             manager.commit();
-            System.out.println("Entregador 'João' foi apagado.");
+            System.out.println("Entregador 'Davi' foi apagado.");
         }
         else {
-            System.out.println("Entregador 'João' nao encontrado.");
+            System.out.println("Entregador 'Davi' nao encontrado.");
         }
     }
 

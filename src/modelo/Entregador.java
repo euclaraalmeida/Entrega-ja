@@ -60,7 +60,7 @@ public class Entregador {
 
 @Override
 public String toString() {
-	
+
 	
 	return "id: " + this.id + ","+ " nome: " + this.nome + "," + " Entregas: " + lista_entregas ;
 }

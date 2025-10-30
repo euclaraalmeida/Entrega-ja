@@ -66,19 +66,32 @@ public class Entrega {
 		this.lista_pedidos.add(pedido);
 	}
 	
+	public Pedido getPedido(String descricao) throws Exception{			
+		for (Pedido p : lista_pedidos) {
+			if (p.getDescricao().equals(descricao)) {
+				return p;
+			}
+		}
+		return null;
+	}
 
     
    
 	//toString
+	// Em modelo/Entrega.java
+
 	@Override
 	public String toString() {
-		ArrayList<String> descricaoPedido = new ArrayList<String>();
-		for(Pedido c : this.getListaPedidos()) {
-			descricaoPedido.add(c.getDescricao());
-		}
 		
-		return "Entrega [data=" + data + ", " + " Pedidos: " + descricaoPedido + "]";
+			ArrayList<String> descricaoPedidos = new ArrayList<String>();
+			for(Pedido p : this.getListaPedidos()) {
+				descricaoPedidos.add(p.getDescricao());
+			}
+	    // Verifica se o entregador não é nulo antes de pegar o nome
+	    String nomeEntregador = (this.entregador != null) ? this.entregador.getNome() : "Sem entregador";
+	    
+	    // Agora não há mais recursão
+	    return "Id:" + getId() +", "+ "Entrega [data=" + data + ", entregador=" + nomeEntregador + ","+"Pedidos:"+ descricaoPedidos+"]";
 	}
-
 
 }

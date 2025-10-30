@@ -41,9 +41,6 @@ public class Cadastrar {
             Entrega E14 = new Entrega("04/11/2025");
             Entrega E15 = new Entrega("05/11/2025");
 
-
-
-
             // --- Criar Pedidos ---
             Pedido P1 = new Pedido("22/10/2025", 150.0, "Eletrônicos", "Porto Velho");
             Pedido P2 = new Pedido("23/10/2025", 89.9, "Roupas", "Ji-Paraná");
@@ -126,9 +123,7 @@ public class Cadastrar {
 
             e7.adicionar(E12);
             E12.setEntregador(e7);
-            // E12 sem pedidos ainda (teste de entrega vazia possível)
 
-            // Arthur, Clara e Laura ainda sem entregas — vamos dar uma cada
             e8.adicionar(E13);
             E13.setEntregador(e8);
 
