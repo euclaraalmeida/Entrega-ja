@@ -15,7 +15,6 @@ public class Entregador {
     }
 
  
-
 	public void adicionar(Entrega e) {
         lista_entregas.add(e);
     }
@@ -35,8 +34,6 @@ public class Entregador {
         return lista_entregas;
     }
     
-    
-    
 	public Entrega getEntregador(int id) throws Exception{			
 		for (Entrega e : lista_entregas) {
 			if (e.getId() == id) {
@@ -44,16 +41,7 @@ public class Entregador {
 			}
 		}
 
-		throw new Exception("Evento não encontrado");
-	}
-	
-	//métodos gerais
-	public void adicionarEntrega(Entrega entrega) {
-		this.lista_entregas.add(entrega);
-	}
-	
-	public void removerEntrega(Entrega entrega) {
-		this.lista_entregas.remove(entrega);
+		throw new Exception("Entregador não encontrado");
 	}
 	
 

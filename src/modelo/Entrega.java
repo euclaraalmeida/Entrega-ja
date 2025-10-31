@@ -49,9 +49,6 @@ public class Entrega {
     }
     
     
-
-
-    
 	public Pedido getEntregas(int id) throws Exception{			
 		for (Pedido c : lista_pedidos) {
 			if (c.getId() == id) {
@@ -59,13 +56,9 @@ public class Entrega {
 			}
 		}
 
-		throw new Exception("Convidado não encontrado");
+		throw new Exception("Entrega não encontrado");
 	}
 
-	public void adicionarEntrega(Pedido pedido) {
-		this.lista_pedidos.add(pedido);
-	}
-	
 	public Pedido getPedido(String descricao) throws Exception{			
 		for (Pedido p : lista_pedidos) {
 			if (p.getDescricao().equals(descricao)) {
@@ -78,8 +71,6 @@ public class Entrega {
     
    
 	//toString
-	// Em modelo/Entrega.java
-
 	@Override
 	public String toString() {
 		
@@ -90,7 +81,6 @@ public class Entrega {
 	    // Verifica se o entregador não é nulo antes de pegar o nome
 	    String nomeEntregador = (this.entregador != null) ? this.entregador.getNome() : "Sem entregador";
 	    
-	    // Agora não há mais recursão
 	    return "Id:" + getId() +", "+ "Entrega [data=" + data + ", entregador=" + nomeEntregador + ","+"Pedidos:"+ descricaoPedidos+"]";
 	}
 

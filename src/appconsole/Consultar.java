@@ -61,7 +61,6 @@ public class Consultar {
 	
  
 	     System.out.println("\n---listar eventos com tem mais de N convidados");
-        // Criando a classe para uso do filtro
         class Filtro implements Evaluation {
             private int n;
 
@@ -82,7 +81,6 @@ public class Consultar {
 		
         }
         
-        //criando a query para consulta
         int N = 2;
         Query queryEntregaFiltro = manager.query();
         queryEntregaFiltro.constrain(Entregador.class);
@@ -91,9 +89,9 @@ public class Consultar {
         List<Entregador> EntregadorComNEntregas = queryEntregaFiltro.execute();
 
         if (EntregadorComNEntregas.isEmpty()) {
-            System.out.println("Nenhum evento com mais de " + N + " convidados");
+            System.out.println("Nenhum entregador com mais de " + N + " entregas");
         } else {
-            System.out.println("Evento(s) com mais de " + N + " convidados:");
+            System.out.println("Entregadorea com mais de " + N + " entregas:");
             for (Entregador e : EntregadorComNEntregas) {
                 System.out.println(e);
             }

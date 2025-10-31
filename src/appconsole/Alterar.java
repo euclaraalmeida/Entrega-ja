@@ -13,12 +13,12 @@ public class Alterar {
     
     public Alterar() {
         manager = Util.conectarBanco();
-        atualizar(); // igual do prof
+        atualizar(); 
         Util.desconectar();
     }
 
     public void atualizar() {
-        //remove a entrega de id6 a entregador lucas, e os objs tem que ta no bacno 
+        //remove a entrega de id6 a entregador lucas, e os objs tem que ta no banco 
         
         Query q1 = manager.query();
         q1.constrain(Entregador.class);
@@ -50,7 +50,7 @@ public class Alterar {
 
                 
                 manager.store(entregador);          // salvando entregador sem aquela entref a espeecifica 
-                manager.store(entregaParaRemover);  // salvando entirega sem entrefador
+                manager.store(entregaParaRemover);  // salvando entrega sem entrefador
 
                
                 manager.commit();
@@ -61,7 +61,7 @@ public class Alterar {
             }
 
         } else {
-            System.out.println("Entregador 'Lucas' não encontrado.");
+            System.out.println("Entregador  não encontrado.");
         }
     }
 

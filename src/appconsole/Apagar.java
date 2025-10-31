@@ -44,7 +44,7 @@ public class Apagar {
                 }
             }
             
-            
+            //Na próxima vez que o banco for salvo, este objeto não deve mais existir."
             manager.delete(entregadorParaApagar);
             
             

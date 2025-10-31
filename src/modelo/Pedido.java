@@ -21,7 +21,6 @@ public class Pedido {
     }
 
     
-
 	public Entrega getEntrega() {
         return entrega;
     }
@@ -46,7 +45,7 @@ public class Pedido {
   //tostring
   		@Override
   		public String toString() {
-  			return "id: " + this.id + ", "+ " Pedido: " + this.descricao + ", "+ "Localização"+ this.localizacao + " Valor: " + this.valor + ", "+ " Entrega: " + (this.entrega != null ? this.entrega.getId() : "Sem entrega");
+  			return "id: " + this.id + ", "+ " Pedido: " + this.descricao + ", "+ "Localização "+":"+ this.localizacao + " Valor: " + this.valor + ", "+ " Entrega: " + (this.entrega != null ? this.entrega.getId() : "Sem entrega");
   		}	
   		
   	
