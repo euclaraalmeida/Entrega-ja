@@ -60,7 +60,7 @@ public class Consultar {
 			}
 	
  
-	     System.out.println("\n---listar eventos com tem mais de N convidados");
+	     System.out.println("\n---listar quais os entregadores que tem mais N entregas");
         class Filtro implements Evaluation {
             private int n;
 
@@ -91,7 +91,7 @@ public class Consultar {
         if (EntregadorComNEntregas.isEmpty()) {
             System.out.println("Nenhum entregador com mais de " + N + " entregas");
         } else {
-            System.out.println("Entregadorea com mais de " + N + " entregas:");
+            System.out.println("Entregadore(s) com mais de " + N + " entregas:");
             for (Entregador e : EntregadorComNEntregas) {
                 System.out.println(e);
             }
